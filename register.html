@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إنشاء حساب جديد</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      background-color: #80cbc4;
+      text-align: center;
+    }
+
+    .form-container {
+      background-color: #e0f2f1;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    input, select {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #ffa000;
+      color: white;
+      padding: 12px;
+      font-size: 18px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      justify-content: start;
+    }
+
+    .checkbox input {
+      margin-left: 10px;
+    }
+
+    .title {
+      margin-bottom: 20px;
+      color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2 class="title">إنشاء حساب جديد</h2>
+    <input type="text" placeholder="الاسم الأول">
+    <input type="text" placeholder="الاسم الأخير">
+    <input type="email" placeholder="البريد الإلكتروني">
+    <select>
+      <option>الكويت</option>
+      <option>السعودية</option>
+      <option>الإمارات</option>
+    </select>
+    <input type="password" placeholder="كلمة المرور">
+    <input type="password" placeholder="تأكيد كلمة المرور">
+    <div class="checkbox">
+      <input type="checkbox" id="terms">
+      <label for="terms">أوافق على الشروط والأحكام وسياسة الخصوصية</label>
+    </div>
+    <button>تسجيل</button>
+  </div>
+
+</body>
+</html>
