@@ -2,154 +2,37 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>لعبة زين الثقافية</title>
   <style>
-    body {
-      font-family: 'Tahoma', sans-serif;
-      margin: 0;
-      background-color: #e0f7f4;
-      text-align: center;
-    }
-    header {
-      background-color: white;
-      padding: 10px;
-    }
-    header img {
-      height: 80px;
-    }
-    .intro {
-      background-color: #c2f0e9;
-      padding: 15px;
-      font-weight: bold;
-      color: #ff2f00;
-    }
-    .game-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background-color: #ff5500;
-      color: white;
-    }
-    .game-header .game-info {
-      font-size: 18px;
-    }
-    .game-header .actions {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-    .btn {
-      background-color: #ffc107;
-      padding: 10px 20px;
-      border: none;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .btn-danger {
-      background-color: #ff2f00;
-    }
-    .categories-title {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #ff2f00;
-    }
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 30px; /* زيادة المسافة بين الكروت */
-      padding: 20px;
-    }
-    .card {
-      background-color: white;
-      border-radius: 8px;
-      border: 2px solid #ff5500;
-      padding: 10px;
-      font-weight: bold;
-      color: #1000a4;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 400px;
-      width: 280px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-    .card p {
-      margin: 0;
-      font-size: 16px;
-      font-weight: bold;
-      color: #ff5500;
-    }
-    .card .values {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-      align-items: center;
-    }
-    .card .values p {
-      background-color: #ff5500;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      width: 80%;
-    }
-    .card .values .double {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-    .card .values .double p {
-      width: 48%;
-    }
+    body { font-family: 'Tahoma', sans-serif; margin: 0; background-color: #e0f7f4; text-align: center; }
+    .game-header { display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #ff5500; color: white; }
+    .btn { background-color: #ffc107; padding: 10px 20px; border: none; color: white; font-weight: bold; cursor: pointer; }
+    .categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; padding: 20px; }
+    .card { background-color: white; border-radius: 8px; border: 2px solid #ff5500; padding: 10px; font-weight: bold; color: #1000a4; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 400px; width: 280px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+    .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; margin-bottom: 10px; }
+    .card .values p { background-color: #ff5500; color: white; padding: 10px 20px; border-radius: 10px; font-size: 20px; font-weight: bold; cursor: pointer; }
+    .disabled { background-color: #b0bec5 !important; cursor: not-allowed; }
   </style>
 </head>
 <body>
   <div class="game-header">
-    <div class="game-info">
+    <div>
       <h2>🎮 لعبة زين الثقافية</h2>
-      <p>فريق 1: <span id="team1-name"></span> | فريق 2: <span id="team2-name"></span></p>
-    </div>
-    <div class="actions">
-      <p>النقاط: <span id="points">0</span></p>
-      <button class="btn" onclick="showHelp()">اتصال بصديق</button>
-      <button class="btn" onclick="search()">بحث</button>
-      <p id="timer">الدقيقة المتبقية: <span id="countdown">60</span></p>
+      <p>فريق 1: <span id="team1-name"></span> (<span id="team1-points">0</span> نقطة) | فريق 2: <span id="team2-name"></span> (<span id="team2-points">0</span> نقطة)</p>
     </div>
   </div>
 
-  <div class="categories-title">الكروت المختارة</div>
-  <div class="categories" id="selected-cards">
-    <!-- سيتم ملء هذه الكروت من الكروت المختارة في index.html -->
-  </div>
+  <div class="categories" id="selected-cards"></div>
 
   <script>
-    // استرجاع الكروت المختارة من localStorage
-    const selectedCategories = JSON.parse(localStorage.getItem("selectedCategories")) || [];
-
-    // استرجاع أسماء الفرق
     const team1 = localStorage.getItem("team1") || "الفريق الأول";
     const team2 = localStorage.getItem("team2") || "الفريق الثاني";
     document.getElementById("team1-name").innerText = team1;
     document.getElementById("team2-name").innerText = team2;
+    document.getElementById("team1-points").innerText = localStorage.getItem("team1_points") || "0";
+    document.getElementById("team2-points").innerText = localStorage.getItem("team2_points") || "0";
 
-    // الكروت والصور الخاصة بها
+    const selectedCategories = JSON.parse(localStorage.getItem("selectedCategories")) || [];
     const cardsImages = {
       "Formula One": "https://www.raed.net/img?id=1323775",
       "FUT 25": "https://www.raed.net/img?id=1323768",
@@ -163,75 +46,48 @@
       "اهل بحر": "https://www.raed.net/img?id=1323801",
       "Prison Break": "https://www.raed.net/img?id=1323781"
     };
-
-    // الأرقام الخاصة بكل كرت
-    const cardValues = {
-      "Formula One": [100, 100, 300, 300, 600, 600],
-      "FUT 25": [100, 100, 300, 300, 600, 600],
-      "Call of Duty": [100, 100, 300, 300, 600, 600],
-      "Breaking Bad": [100, 100, 300, 300, 600, 600],
-      "UFC": [100, 100, 300, 300, 600, 600],
-      "Marvel & DC": [100, 100, 300, 300, 600, 600],
-      "League of Legends": [100, 100, 300, 300, 600, 600],
-      "La Casa De Papel": [100, 100, 300, 300, 600, 600],
-      "TK": [100, 100, 300, 300, 600, 600],
-      "اهل بحر": [100, 100, 300, 300, 600, 600],
-      "Prison Break": [100, 100, 300, 300, 600, 600]
+    const cardValues = { "Formula One": [100, 300, 600], "FUT 25": [100, 300, 600], "Call of Duty": [100, 300, 600],
+      "Breaking Bad": [100, 300, 600], "UFC": [100, 300, 600], "Marvel & DC": [100, 300, 600],
+      "League of Legends": [100, 300, 600], "La Casa De Papel": [100, 300, 600], "TK": [100, 300, 600],
+      "اهل بحر": [100, 300, 600], "Prison Break": [100, 300, 600]
     };
+    const container = document.getElementById("selected-cards");
 
-    // عرض الكروت المختارة مع الصور
-    const selectedCardsContainer = document.getElementById("selected-cards");
-    selectedCategories.forEach(card => {
-      const cardElement = document.createElement("div");
-      cardElement.classList.add("card");
-      const cardImageUrl = cardsImages[card];
-      const values = cardValues[card];
-
-      // إنشاء المحتوى الخاص بالكرت مع الصورة والأرقام
-      cardElement.innerHTML = `
-        <img src="${cardImageUrl}" alt="${card}" />
-        <div>${card}</div>
+    selectedCategories.forEach(cat => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      const img = cardsImages[cat];
+      const vals = cardValues[cat];
+      card.innerHTML = `
+        <img src="${img}" alt="${cat}" />
+        <div>${cat}</div>
         <div class="values">
-          <div class="double">
-            <p>${values[0]}</p>
-            <p>${values[1]}</p>
-          </div>
-          <div class="double">
-            <p>${values[2]}</p>
-            <p>${values[3]}</p>
-          </div>
-          <div class="double">
-            <p>${values[4]}</p>
-            <p>${values[5]}</p>
-          </div>
-        </div>
-      `;
-      selectedCardsContainer.appendChild(cardElement);
+          ${vals.map(v => `<p onclick="openQuestion('${cat}', ${v}, this)">${v}</p>`).join('')}
+        </div>`;
+      container.appendChild(card);
     });
 
-    // مؤقت الدقيقة
-    let countdownTimer;
-    let timeLeft = 60;
-    function startTimer() {
-      countdownTimer = setInterval(() => {
-        timeLeft--;
-        document.getElementById("countdown").innerText = timeLeft;
-        if (timeLeft <= 0) {
-          clearInterval(countdownTimer);
-        }
-      }, 1000);
+    function openQuestion(cat, val, element) {
+      // تحديد ما إذا كان تم اختيار السؤال من قبل
+      if (element.classList.contains('disabled')) return;
+
+      // تعطيل الكرت بعد اختياره
+      element.classList.add('disabled');
+
+      // تخزين البيانات في localStorage
+      localStorage.setItem("currentQuestionCategory", cat);
+      localStorage.setItem("currentQuestionValue", val);
+
+      // الانتقال إلى صفحة السؤال
+      window.location.href = "question.html";
     }
 
-    // الاتصال بالصديق
-    function showHelp() {
-      alert("اتصال بصديق: هل تحتاج إلى مساعدة؟");
-      startTimer();
-    }
-
-    // البحث
-    function search() {
-      alert("بحث: قم باستخدام محرك البحث للعثور على الإجابة!");
-      startTimer();
+    const winner = localStorage.getItem("winner");
+    if (winner) {
+      setTimeout(() => {
+        alert("🎉 مبروك! فاز " + (winner === "team1" ? team1 : team2));
+        localStorage.removeItem("winner");
+      }, 500);
     }
   </script>
 </body>
